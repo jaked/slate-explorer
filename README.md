@@ -1,1 +1,1 @@
-# slate-explorer
+# Slate Explorer
