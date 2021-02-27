@@ -334,7 +334,7 @@ const App = () => {
     const editor = xmlToSlate(inputValue);
 
     new Function(`
-      return (editor, Editor, Element, Node, Path, Text, Transforms) => {
+      return (editor, Editor, Element, Node, Path, Range, Text, Transforms) => {
         ${transformValue}
       }
     `)()(
@@ -343,6 +343,7 @@ const App = () => {
       Slate.Element,
       Slate.Node,
       Slate.Path,
+      Slate.Range,
       Slate.Text,
       Slate.Transforms
     );
