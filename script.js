@@ -1,6 +1,21 @@
+import parseXml from 'https://cdn.skypack.dev/pin/@rgrove/parse-xml@v3.0.0-jMFe7mSMYStpUfnUTz7K/mode=imports/optimized/@rgrove/parse-xml.js';
+import XMLWriter from 'https://cdn.skypack.dev/pin/xml-writer@v1.7.0-r8i5k18ngLdXbG8rwkMZ/mode=imports/optimized/xml-writer.js';
+import Editor from 'https://cdn.skypack.dev/pin/react-simple-code-editor@v0.11.0-vp8sfAAurbJN9zEtyguq/mode=imports/optimized/react-simple-code-editor.js';
+import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-core.js';
+import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-clike.js';
+import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-javascript.js';
+import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-markup.js';
+import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.59.0-cQ160mL40krPQ5v7HkqX/mode=imports/optimized/slate.js';
+import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.59.0-A7k58MbZmnR2Y5BvGdab/mode=imports/optimized/slate-history.js';
+import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.59.0-ntsTV3UqL2oRdHZIq3bo/mode=imports/optimized/slate-hyperscript.js';
+
+// these can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
+// import * as SlateReact from 'https://cdn.skypack.dev/slate-react';
+// import React from 'https://cdn.skypack.dev/react';
+// import ReactDOM from 'https://cdn.skypack.dev/react-dom';
+
 /* turn off JSHint warnings in Glitch: */
-/* globals parseXml, Editor, Prism, React, ReactDOM */
-/* globals Slate, SlateReact, SlateHistory, SlateHyperscript, XMLWriter */
+/* globals React, ReactDOM, SlateReact */
 
 const useLocalStorage = (label, init, fromStorage, toStorage) => {
   const storageValue = localStorage.getItem(label);
@@ -176,16 +191,17 @@ const ScrollBox = ({ gridArea, children }) => {
   );
 };
 
-const Label = ({ gridArea, children }) => {
+const Label = (props) => {
+  const { gridArea, children, justifySelf = "end", element = "h3" } = props;
   return e(
     "div",
     {
       style: {
         gridArea,
-        justifySelf: "end"
+        justifySelf
       }
     },
-    e("h3", {}, children)
+    e(element, {}, children)
   );
 };
 
@@ -334,7 +350,7 @@ const App = () => {
     const editor = xmlToSlate(inputValue);
 
     new Function(`
-      return (editor, Editor, Element, Node, Path, Range, Text, Transforms) => {
+      return (editor, Editor, Element, Node, Path, Text, Transforms) => {
         ${transformValue}
       }
     `)()(
@@ -343,7 +359,6 @@ const App = () => {
       Slate.Element,
       Slate.Node,
       Slate.Path,
-      Slate.Range,
       Slate.Text,
       Slate.Transforms
     );
@@ -364,17 +379,19 @@ const App = () => {
         padding: "10px",
         display: "grid",
         gridTemplateColumns: "max-content 1fr 1fr",
-        gridTemplateRows: "1fr 1fr 1fr",
+        gridTemplateRows: "max-content 1fr 1fr 1fr",
         gridTemplateAreas: `
-          "inputLabel slateInput xmlInput"
-          "transformLabel transform transform"
-          "outputLabel slateOutput xmlOutput"
+          "blank          title       title"
+          "inputLabel     slateInput  xmlInput"
+          "transformLabel transform   transform"
+          "outputLabel    slateOutput xmlOutput"
         `,
         height: "100vh",
         width: "100vw"
       }
     },
     [
+      e(Label, { key: "title", gridArea: "title", justifySelf: "center", element: "h1" }, "Slate Explorer"),
       e(Label, { key: "inputLabel", gridArea: "inputLabel" }, "input"),
       e(
         Label,

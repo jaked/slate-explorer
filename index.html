@@ -7,49 +7,15 @@
 
     <title>Slate Explorer</title>
 
-    <!--
-      experiment: can we write a React app without a bundler?
-      verdict: it is not very comfortable
-      core stuff (React, Slate) is available pre-bundled
-      but I had to go hunting for usable deps
-      and do some gross stuff to load them
-    -->
-
     <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/prismjs/themes/prism.css" crossorigin>
+    <link rel="stylesheet" type="text/css" href="https://cdn.skypack.dev/prismjs@v1.23.0/themes/prism.css" crossorigin>
     
+    <!-- these can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142 -->
     <script src="https://unpkg.com/react/umd/react.development.js" defer></script>
     <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" defer></script>
     <script src="https://unpkg.com/slate/dist/slate.js" defer></script>
-    <script src="https://unpkg.com/slate-history/dist/slate-history.js" defer></script>
-    <script src="https://unpkg.com/slate-hyperscript/dist/slate-hyperscript.js" defer></script>
     <script src="https://unpkg.com/slate-react/dist/slate-react.js" defer></script>
-    <script src="https://unpkg.com/prismjs/components/prism-core.js" defer></script>
-    <script src="https://unpkg.com/prismjs/components/prism-clike.js" defer></script>
-    <script src="https://unpkg.com/prismjs/components/prism-javascript.js" defer></script>
-    <script src="https://unpkg.com/prismjs/components/prism-markup.js" defer></script>
-    <script>
-      // load CommonJS / UMD modules
-      global = window
-      exports = {}
-      require = mod => {
-        if (mod === 'react') return React;
-        else throw new Error(`no such module ${mod}`);
-      }
-      // TODO(jaked)
-      // this is somehow a magic variable for module loading
-      // if we define it then previous loaded modules blow up
-      // so we can't fake it out for xml-writer
-      // module = {}
-    </script>
-    <script src="https://unpkg.com/@rgrove/parse-xml@3.0.0/dist/umd/parse-xml.min.js"></script>
-    <script src="https://unpkg.com/xml-writer@1.7.0/lib/xml-writer.js"></script>
-    <script src="https://unpkg.com/react-simple-code-editor/lib/index.js" defer></script>
-    <script>
-      // TODO(jaked) somehow Editor is available here with defer but not parseXml
-      Editor = exports.default
-      parseXml = exports['parse-xml']
-    </script>
+
     <script type="module" src="/script.js"></script>
   </head>  
   <body>
