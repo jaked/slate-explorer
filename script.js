@@ -130,7 +130,7 @@ const slateToXml = editor => {
         (offset, index, self) =>
           offset !== null && self.indexOf(offset) === index
       );
-      offsets.sort();
+      offsets.sort((a, b) => (a - b));
 
       // write text, inserting selection tag as needed
       xw.indent = false;
@@ -152,7 +152,8 @@ const slateToXml = editor => {
           xw.startElement("cursor").endElement();
         else if (offset === anchorOffset)
           xw.startElement("anchor").endElement();
-        else if (offset === focusOffset) xw.startElement("focus").endElement();
+        else if (offset === focusOffset)
+          xw.startElement("focus").endElement();
         else throw new Error("expected anchor or focus");
       }
       if (lastOffset < node.text.length) {
