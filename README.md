@@ -9,3 +9,5 @@ A tool for exploring and understanding the [Slate](https://docs.slatejs.org/) ri
 ![Slate Explorer screenshot](https://cdn.glitch.com/2b6e46c5-649e-40ac-b9a5-b84fa37615f5%2FSlate-Explorer.jpeg?v=1621533302264)
 
 More context and details [here](https://jaked.org/blog/2021-02-26-Slate-Explorer).
+
+Run from a local clone with `npx http-server .`.

@@ -5,9 +5,9 @@ import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IA
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-clike.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-javascript.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-markup.js';
-import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.59.0-cQ160mL40krPQ5v7HkqX/mode=imports/optimized/slate.js';
-import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.59.0-A7k58MbZmnR2Y5BvGdab/mode=imports/optimized/slate-history.js';
-import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.59.0-ntsTV3UqL2oRdHZIq3bo/mode=imports/optimized/slate-hyperscript.js';
+import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.63.0-TfTTwdDci10dBArwYYLt/mode=imports/optimized/slate.js';
+import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.62.0-zGj7QlfqPEPT4eVeAZGN/mode=imports/optimized/slate-history.js';
+import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.62.0-InTixSbjzwTyhqYbrm6c/mode=imports/optimized/slate-hyperscript.js';
 
 // these can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
 // import * as SlateReact from 'https://cdn.skypack.dev/slate-react';
