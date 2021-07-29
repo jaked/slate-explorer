@@ -5,17 +5,20 @@ import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IA
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-clike.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-javascript.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-markup.js';
-import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.59.0-cQ160mL40krPQ5v7HkqX/mode=imports/optimized/slate.js';
-import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.59.0-A7k58MbZmnR2Y5BvGdab/mode=imports/optimized/slate-history.js';
-import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.59.0-ntsTV3UqL2oRdHZIq3bo/mode=imports/optimized/slate-hyperscript.js';
+import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.63.0-TfTTwdDci10dBArwYYLt/mode=imports/optimized/slate.js';
+import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.62.0-zGj7QlfqPEPT4eVeAZGN/mode=imports/optimized/slate-history.js';
+import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.62.0-InTixSbjzwTyhqYbrm6c/mode=imports/optimized/slate-hyperscript.js';
+import React from 'https://cdn.skypack.dev/pin/react@v17.0.1-yH0aYV1FOvoIPeKBbHxg/mode=imports/optimized/react.js';
+import ReactDOM from 'https://cdn.skypack.dev/pin/react-dom@v17.0.1-oZ1BXZ5opQ1DbTh7nu9r/mode=imports/optimized/react-dom.js';
+import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oNzpdFszRH7WWPG5yu6u/mode=imports/optimized/react-inspector.js';
 
-// these can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
-// import * as SlateReact from 'https://cdn.skypack.dev/slate-react';
-// import React from 'https://cdn.skypack.dev/react';
-// import ReactDOM from 'https://cdn.skypack.dev/react-dom';
+// can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
+window.React = React;
+window.Slate = Slate;
+await import('https://unpkg.com/slate-react@0.65.2/dist/slate-react.js');
 
 /* turn off JSHint warnings in Glitch: */
-/* globals React, ReactDOM, SlateReact */
+/* globals SlateReact */
 
 const useLocalStorage = (label, init, fromStorage, toStorage) => {
   const storageValue = localStorage.getItem(label);
@@ -130,7 +133,7 @@ const slateToXml = editor => {
         (offset, index, self) =>
           offset !== null && self.indexOf(offset) === index
       );
-      offsets.sort();
+      offsets.sort((a, b) => (a - b));
 
       // write text, inserting selection tag as needed
       xw.indent = false;
@@ -152,7 +155,8 @@ const slateToXml = editor => {
           xw.startElement("cursor").endElement();
         else if (offset === anchorOffset)
           xw.startElement("anchor").endElement();
-        else if (offset === focusOffset) xw.startElement("focus").endElement();
+        else if (offset === focusOffset)
+          xw.startElement("focus").endElement();
         else throw new Error("expected anchor or focus");
       }
       if (lastOffset < node.text.length) {
@@ -344,12 +348,13 @@ const App = () => {
     }
   }, []);
 
-  let outputXmlValue = undefined;
-  let outputSlateValue = undefined;
+  let outputXmlValue = '';
+  let outputSlateValue = [];
+  let transformResult = undefined;
   try {
     const editor = xmlToSlate(inputValue);
 
-    new Function(`
+    transformResult = new Function(`
       return (editor, Editor, Element, Node, Path, Text, Transforms) => {
         ${transformValue}
       }
@@ -362,15 +367,14 @@ const App = () => {
       Slate.Text,
       Slate.Transforms
     );
-
+    
     outputXmlValue = slateToXml(editor);
     outputSlateValue = editor.children;
   } catch (e) {
     console.log(e);
-    outputXmlValue = e.message;
-    outputSlateValue = [];
+    transformResult = e.message;
   }
-
+  
   return e(
     "div",
     {
@@ -383,7 +387,7 @@ const App = () => {
         gridTemplateAreas: `
           "blank          title       title"
           "inputLabel     slateInput  xmlInput"
-          "transformLabel transform   transform"
+          "transformLabel transform   transformResult"
           "outputLabel    slateOutput xmlOutput"
         `,
         height: "100vh",
@@ -421,6 +425,13 @@ const App = () => {
         setValue: setTransformValue,
         language: Prism.languages.js
       }),
+      e(ScrollBox,
+        {
+          key: "transformResult",
+          gridArea: "transformResult",
+        },
+        e(Inspector, { data: transformResult })
+      ),
       e(CodeEditor, {
         key: "xmlOutput",
         gridArea: "xmlOutput",
