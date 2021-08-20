@@ -15,7 +15,9 @@ import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oN
 // can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
 window.React = React;
 window.Slate = Slate;
-await import('https://unpkg.com/slate-react@0.65.2/dist/slate-react.js');
+import('https://unpkg.com/slate-react@0.65.2/dist/slate-react.js').then(() => {
+  ReactDOM.render(e(App), document.getElementById("app"))
+});
 
 /* turn off JSHint warnings in Glitch: */
 /* globals SlateReact */
@@ -450,5 +452,3 @@ const App = () => {
     ]
   );
 };
-
-ReactDOM.render(e(App), document.getElementById("app"));
