@@ -22,15 +22,29 @@ import('https://unpkg.com/slate-react@0.65.2/dist/slate-react.js').then(() => {
 /* turn off JSHint warnings in Glitch: */
 /* globals SlateReact */
 
-const useLocalStorage = (label, init, fromStorage, toStorage) => {
+const useState = (label, init, fromStorage, toStorage) => {
+  let hashValue = undefined;
+  if (window.location.hash) {
+    try {
+      const json = JSON.parse(atob(decodeURIComponent(window.location.hash.substring(1))));
+      if (label in json)
+        hashValue = json[label];
+    } catch (e) { console.log(e) }
+  }
   const storageValue = localStorage.getItem(label);
-  const [value, setValue] = React.useState(
-    storageValue
-      ? fromStorage
-        ? fromStorage(storageValue)
-        : storageValue
-      : init()
-  );
+  let initValue;
+  if (hashValue !== undefined) {
+    initValue = hashValue;
+  } else if (storageValue !== null) {
+    if (fromStorage) {
+      initValue = fromStorage(storageValue);
+    } else {
+      initValue = storageValue;
+    }
+  } else {
+    initValue = init();
+  }
+  const [value, setValue] = React.useState(initValue);
   const setLocalValue = React.useCallback(
     value => {
       localStorage.setItem(label, toStorage ? toStorage(value) : value);
@@ -198,7 +212,7 @@ const ScrollBox = ({ gridArea, children }) => {
 };
 
 const Label = (props) => {
-  const { gridArea, children, justifySelf = "end", element = "h3" } = props;
+  const { gridArea, children, justifySelf = "end" } = props;
   return e(
     "div",
     {
@@ -207,9 +221,15 @@ const Label = (props) => {
         justifySelf
       }
     },
-    e(element, {}, children)
+    e('p', { style: { margin: '5px', fontSize: '24px' } }, children)
   );
 };
+
+const Help = (props) => {
+  const { gridArea, children } = props;
+
+  return e(ScrollBox, { gridArea }, 'help');
+}
 
 const renderLeaf = ({ leaf, attributes, children }) =>
   e(
@@ -326,21 +346,28 @@ const App = () => {
     []
   );
 
-  const [inputValue, setInputValue] = useLocalStorage(
+  const [inputValue, setInputValue] = useState(
     "input",
     () => "<editor>\n  <block>this is a line of text</block>\n</editor>"
   );
-  const [slateValue, setSlateValue] = useLocalStorage(
+  const [slateValue, setSlateValue] = useState(
     "slate",
     () => { try { return xmlToSlate(inputValue).children } catch (e) { return [ { type: 'block', children: [] } ] } },
     json => JSON.parse(json),
     nodes => JSON.stringify(nodes, undefined, 2)
   );
-  const [transformValue, setTransformValue] = useLocalStorage(
+  const [transformValue, setTransformValue] = useState(
     "transform",
     () => "editor.insertText('xyzzy')"
   );
-
+  const [showHelpValue, setShowHelpValue] = useState(
+    "showHelp",
+    () => false,
+    string => string === 'true',
+    boolean => boolean ? 'true' : 'false'
+  );
+  const copyLinkRef = React.useRef(null);
+  
   const setSlateAndInputValue = React.useCallback(nodes => {
     setSlateValue(nodes);
     setInputValue(slateToXml(inputEditor));
@@ -384,7 +411,47 @@ const App = () => {
     console.log(e);
     transformResult = e.message;
   }
-  
+
+  // cribbed from https://nginx-playground.wizardzines.com/script.js
+  const copyLink = (e) => {
+    e.preventDefault();
+    const state = {
+      input: inputValue,
+      slate: slateValue,
+      transform: transformValue,
+      showHelp: showHelpValue
+    };
+    const hash = btoa(JSON.stringify(state));
+    window.location.hash = hash;
+    // copy url to clipboard
+    const url = window.location.href;
+    const el = document.createElement('textarea');
+    el.value = url;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+
+    const span = copyLinkRef.current;
+    if (span) {
+      span.style.background = 'red';
+      span.style.transition = 'background 0s';
+      setTimeout(() => {
+        span.style.background = 'transparent';
+        span.style.transition = 'background 0.5s';
+      }, 0);
+    }
+  }
+
+  const toggleHelp = (e) => {
+    e.preventDefault();
+    setShowHelpValue(!showHelpValue);
+  }
+
+  React.useEffect(() => {
+    
+  })
+
   return e(
     "div",
     {
@@ -393,9 +460,10 @@ const App = () => {
         padding: "10px",
         display: "grid",
         gridTemplateColumns: "max-content 1fr 1fr",
-        gridTemplateRows: "max-content 1fr 1fr 1fr",
+        gridTemplateRows: `max-content ${showHelpValue ? '1fr' : ''} 1fr 1fr 1fr`,
         gridTemplateAreas: `
           "blank          title       title"
+${showHelpValue ?'"helpLabel   help        help"' : ''}
           "inputLabel     slateInput  xmlInput"
           "transformLabel transform   transformResult"
           "outputLabel    slateOutput xmlOutput"
@@ -405,7 +473,47 @@ const App = () => {
       }
     },
     [
-      e(Label, { key: "title", gridArea: "title", justifySelf: "center", element: "h1" }, "Slate Explorer"),
+      e(
+        'div',
+        { key: "title", style: { gridArea: "title" } },
+        e('p', { style: { margin: '5px' } },
+          e(
+            'span',
+            { style: { fontSize: '36px' } },
+            "Slate Explorer"
+          ),
+          e(
+            'span',
+            {
+              ref: copyLinkRef,
+              onClick: copyLink,
+              style: {
+                cursor: 'pointer',
+                fontSize: '24px',
+                marginLeft: '25px',
+                userSelect: 'none',
+                borderRadius: '5px',
+                padding: '5px',
+              }
+            },
+            "copy link"
+          ),
+          e(
+            'span',
+            {
+              onClick: toggleHelp,
+              style: {
+                cursor: 'pointer',
+                fontSize: '24px',
+                marginLeft: '25px',
+                userSelect: 'none',
+              }
+            },
+            showHelpValue ? "hide help" : "show help"
+          ),
+        )
+      ),
+      showHelpValue && e(Label, { key: "helpLabel", gridArea: "helpLabel" }, "help"),
       e(Label, { key: "inputLabel", gridArea: "inputLabel" }, "input"),
       e(
         Label,
@@ -414,6 +522,7 @@ const App = () => {
       ),
       e(Label, { key: "outputLabel", gridArea: "outputLabel" }, "output"),
 
+      showHelpValue && e(Help, { key: "help", gridArea: "help" }),
       e(SlateEditor, {
         key: "slateInput",
         gridArea: "slateInput",
