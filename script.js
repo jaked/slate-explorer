@@ -251,7 +251,14 @@ const renderElement = ({ element, attributes, children }) => {
         children
       );
 
-    default:
+  case 'void':
+    return e(
+      'div',
+      { ...attributes },
+      children
+    );
+
+  default:
   }
 }
 
