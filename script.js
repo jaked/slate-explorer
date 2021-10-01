@@ -228,7 +228,29 @@ const Label = (props) => {
 const Help = (props) => {
   const { gridArea, children } = props;
 
-  return e(ScrollBox, { gridArea }, 'help');
+  return e(
+    ScrollBox,
+    { gridArea },
+    e('div', { dangerouslySetInnerHTML: { __html:`
+<h3>Hello!</h3>
+
+<p>Slate Explorer is a tool to help you explore the <a href="https://slatejs.org/">Slate</a> rich-text editor framework and its API. It's made by <a href="https://jaked.org/">Jake Donham</a>.</p>
+
+<h3>Input</h3>
+
+<p>The left-hand input box is a Slate editor. The right-hand input box is the XML representation of the editor model (using <a href="https://docs.slatejs.org/libraries/slate-hyperscript">slate-hyperscript</a>). You can change either input box and your changes will be reflected in the other. (Try changing the selection in the Slate editor and see how it shows up in the XML representation.)</p>
+
+<p>The editor has no UI for setting styles etc. but you can use the following tags in the XML box: <code>block</code>, <code>inline</code>, <code>void</code>, <code>p</code>, <code>h1</code>, <code>h2</code>, <code>h3</code>, <code>ul</code>, <code>li</code>. You can also use <code>text</code> with attributes <code>bold</code> and <code>italic</code>. Finally you can use selection tags: <code>cursor</code>, <code>anchor</code>, <code>focus</code>.</p>
+
+<h3>Transform</h3>
+
+<p>The left-hand transform box accepts JavaScript code that you can use to run Slate API calls against the editor. The following identifiers are bound in the environment: <code>editor</code>, <code>Editor</code>, <code>Element</code>, <code>Node</code>, <code>Path</code>, <code>Range</code>, <code>Text</code>, <code>Transforms</code>. If you return a value from this code, it's shown in an inspector in the right-hand transform box. (Try <code>return editor.selection</code> then change the selection.)</p>
+
+<h3>Output</h3>
+
+<p>The left-hand output box is a read-only Slate editor that shows the result of the transformation; the right-hand output box shows the XML representation.</p>
+` } })
+  );
 }
 
 const renderLeaf = ({ leaf, attributes, children }) =>
@@ -459,14 +481,13 @@ const App = () => {
         backgroundColor: 'aliceblue',
         padding: "10px",
         display: "grid",
-        gridTemplateColumns: "max-content 1fr 1fr",
-        gridTemplateRows: `max-content ${showHelpValue ? '1fr' : ''} 1fr 1fr 1fr`,
+        gridTemplateColumns: `max-content 1fr 1fr ${showHelpValue ? '2fr' : ''}`,
+        gridTemplateRows: `max-content 1fr 1fr 1fr`,
         gridTemplateAreas: `
-          "blank          title       title"
-${showHelpValue ?'"helpLabel   help        help"' : ''}
-          "inputLabel     slateInput  xmlInput"
-          "transformLabel transform   transformResult"
-          "outputLabel    slateOutput xmlOutput"
+          "blank          title       title           ${showHelpValue ? 'blank2' : ''}"
+          "inputLabel     slateInput  xmlInput        ${showHelpValue ? 'help' : ''}"
+          "transformLabel transform   transformResult ${showHelpValue ? 'help' : ''}"
+          "outputLabel    slateOutput xmlOutput       ${showHelpValue ? 'help' : ''}"
         `,
         height: "100vh",
         width: "100vw"
@@ -513,7 +534,6 @@ ${showHelpValue ?'"helpLabel   help        help"' : ''}
           ),
         )
       ),
-      showHelpValue && e(Label, { key: "helpLabel", gridArea: "helpLabel" }, "help"),
       e(Label, { key: "inputLabel", gridArea: "inputLabel" }, "input"),
       e(
         Label,
