@@ -234,7 +234,7 @@ const Help = (props) => {
     e('div', { dangerouslySetInnerHTML: { __html:`
 <h3>Hello!</h3>
 
-<p>Slate Explorer is a tool to help you explore the <a href="https://slatejs.org/">Slate</a> rich-text editor framework and its API. It's made by <a href="https://jaked.org/">Jake Donham</a>.</p>
+<p>Slate Explorer is a tool to help you explore the <a href="https://slatejs.org/">Slate</a> rich-text editor framework and its API. It's made by <a href="https://jaked.org/">Jake Donham</a>. More background <a href="https://jaked.org/blog/2021-02-26-Slate-Explorer">here</a>.</p>
 
 <h3>Input</h3>
 
