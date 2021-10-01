@@ -348,6 +348,81 @@ const CodeEditor = ({ gridArea, value, setValue, language }) => {
   );
 };
 
+const TitleBar = ({ gridArea, state, showHelpValue, setShowHelpValue }) => {
+  const copyLinkRef = React.useRef(null);
+
+  // cribbed from https://nginx-playground.wizardzines.com/script.js
+  const copyLink = (e) => {
+    e.preventDefault();
+    const hash = btoa(JSON.stringify(state));
+    window.location.hash = hash;
+    // copy url to clipboard
+    const url = window.location.href;
+    const el = document.createElement('textarea');
+    el.value = url;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+
+    const span = copyLinkRef.current;
+    if (span) {
+      span.style.background = 'red';
+      span.style.transition = 'background 0s';
+      setTimeout(() => {
+        span.style.background = 'transparent';
+        span.style.transition = 'background 0.5s';
+      }, 0);
+    }
+  }
+
+  const toggleHelp = (e) => {
+    e.preventDefault();
+    setShowHelpValue(!showHelpValue);
+  }
+
+  return e(
+    'div',
+    { key: "titleBar", style: { gridArea: "titleBar" } },
+    e('p', { style: { margin: '5px' } },
+      e(
+        'span',
+        { style: { fontSize: '36px' } },
+        "Slate Explorer"
+      ),
+      e(
+        'span',
+        {
+          ref: copyLinkRef,
+          onClick: copyLink,
+          style: {
+            cursor: 'pointer',
+            fontSize: '24px',
+            marginLeft: '25px',
+            userSelect: 'none',
+            borderRadius: '5px',
+            padding: '5px',
+          }
+        },
+        "copy link"
+      ),
+      e(
+        'span',
+        {
+          onClick: toggleHelp,
+          style: {
+            cursor: 'pointer',
+            fontSize: '24px',
+            marginLeft: '25px',
+            userSelect: 'none',
+          }
+        },
+        showHelpValue ? "hide help" : "show help"
+      ),
+     )
+  );
+}
+
 const App = () => {
   // important to memoize the editor
   // or else the Slate component is recreated on every edit
@@ -388,7 +463,6 @@ const App = () => {
     string => string === 'true',
     boolean => boolean ? 'true' : 'false'
   );
-  const copyLinkRef = React.useRef(null);
   
   const setSlateAndInputValue = React.useCallback(nodes => {
     setSlateValue(nodes);
@@ -434,46 +508,6 @@ const App = () => {
     transformResult = e.message;
   }
 
-  // cribbed from https://nginx-playground.wizardzines.com/script.js
-  const copyLink = (e) => {
-    e.preventDefault();
-    const state = {
-      input: inputValue,
-      slate: slateValue,
-      transform: transformValue,
-      showHelp: showHelpValue
-    };
-    const hash = btoa(JSON.stringify(state));
-    window.location.hash = hash;
-    // copy url to clipboard
-    const url = window.location.href;
-    const el = document.createElement('textarea');
-    el.value = url;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-
-    const span = copyLinkRef.current;
-    if (span) {
-      span.style.background = 'red';
-      span.style.transition = 'background 0s';
-      setTimeout(() => {
-        span.style.background = 'transparent';
-        span.style.transition = 'background 0.5s';
-      }, 0);
-    }
-  }
-
-  const toggleHelp = (e) => {
-    e.preventDefault();
-    setShowHelpValue(!showHelpValue);
-  }
-
-  React.useEffect(() => {
-    
-  })
-
   return e(
     "div",
     {
@@ -484,7 +518,7 @@ const App = () => {
         gridTemplateColumns: `max-content 1fr 1fr ${showHelpValue ? '2fr' : ''}`,
         gridTemplateRows: `max-content 1fr 1fr 1fr`,
         gridTemplateAreas: `
-          "blank          title       title           ${showHelpValue ? 'blank2' : ''}"
+          "blank          titleBar    titleBar        ${showHelpValue ? 'blank2' : ''}"
           "inputLabel     slateInput  xmlInput        ${showHelpValue ? 'help' : ''}"
           "transformLabel transform   transformResult ${showHelpValue ? 'help' : ''}"
           "outputLabel    slateOutput xmlOutput       ${showHelpValue ? 'help' : ''}"
@@ -495,44 +529,19 @@ const App = () => {
     },
     [
       e(
-        'div',
-        { key: "title", style: { gridArea: "title" } },
-        e('p', { style: { margin: '5px' } },
-          e(
-            'span',
-            { style: { fontSize: '36px' } },
-            "Slate Explorer"
-          ),
-          e(
-            'span',
-            {
-              ref: copyLinkRef,
-              onClick: copyLink,
-              style: {
-                cursor: 'pointer',
-                fontSize: '24px',
-                marginLeft: '25px',
-                userSelect: 'none',
-                borderRadius: '5px',
-                padding: '5px',
-              }
-            },
-            "copy link"
-          ),
-          e(
-            'span',
-            {
-              onClick: toggleHelp,
-              style: {
-                cursor: 'pointer',
-                fontSize: '24px',
-                marginLeft: '25px',
-                userSelect: 'none',
-              }
-            },
-            showHelpValue ? "hide help" : "show help"
-          ),
-        )
+        TitleBar,
+        {
+          key: 'titleBar',
+          gridArea: 'titleBar',
+          state: {
+            input: inputValue,
+            slate: slateValue,
+            transform: transformValue,
+            showHelp: showHelpValue
+          },
+          showHelpValue,
+          setShowHelpValue
+        }
       ),
       e(Label, { key: "inputLabel", gridArea: "inputLabel" }, "input"),
       e(
