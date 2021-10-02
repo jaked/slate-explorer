@@ -16,7 +16,7 @@ import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oN
 window.React = React;
 window.Slate = Slate;
 import('https://unpkg.com/slate-react@0.65.2/dist/slate-react.js').then(() => {
-  ReactDOM.render(e(App), document.getElementById("app"))
+  ReactDOM.render(e(App), document.getElementById('app'))
 });
 
 /* turn off JSHint warnings in Glitch: */
@@ -57,25 +57,25 @@ const useState = (label, init, fromStorage, toStorage) => {
 
 const jsx = SlateHyperscript.createHyperscript({
   elements: {
-    block: { type: "block" },
-    inline: { type: "inline" },
-    void: { type: "void" },
-    p: { type: "p" },
-    h1: { type: "h1" },
-    h2: { type: "h2" },
-    h3: { type: "h3" },
-    ul: { type: "ul" },
-    li: { type: "li" },
+    block: { type: 'block' },
+    inline: { type: 'inline' },
+    void: { type: 'void' },
+    p: { type: 'p' },
+    h1: { type: 'h1' },
+    h2: { type: 'h2' },
+    h3: { type: 'h3' },
+    ul: { type: 'ul' },
+    li: { type: 'li' },
   }
 });
 
 const withTypes = editor => {
   const { isInline, isVoid } = editor;
   editor.isInline = element => {
-    return element.type === "inline" ? true : isInline(element);
+    return element.type === 'inline' ? true : isInline(element);
   };
   editor.isVoid = element => {
-    return element.type === "void" ? true : isVoid(element);
+    return element.type === 'void' ? true : isVoid(element);
   };
   return editor;
 };
@@ -83,10 +83,10 @@ const withTypes = editor => {
 const xmlToSlate = string => {
   const xmlToSlate = xml => {
     switch (xml.type) {
-      case "document":
+      case 'document':
         // it's an XML parse error to have != 1 child
         return xmlToSlate(xml.children[0]);
-      case "element":
+      case 'element':
         return jsx(
           xml.name,
           // xml.attributes has some JS magic that SlateHyperscript.jsx doesn't like
@@ -95,9 +95,9 @@ const xmlToSlate = string => {
           xml.children
             .map(xmlToSlate)
             // filter out all-whitespace text nodes like JSX
-            .filter(node => typeof node != "string" || /\S/.test(node))
+            .filter(node => typeof node != 'string' || /\S/.test(node))
         );
-      case "text":
+      case 'text':
         // JSX trims whitespace at start / end
         // and also collapses interior whitespace to a single space.
         // this makes it hard to preserve space in Slate tree
@@ -108,7 +108,7 @@ const xmlToSlate = string => {
         // but they are inserted by XML formatting.
         return xml.text.replace(/^\n\s*/, '').replace(/\n\s*$/, '').replace(/\n\s*/g, ' ');
       default:
-        throw new Error("unexpected XML type");
+        throw new Error('unexpected XML type');
     }
   };
   const editor = withTypes(xmlToSlate(parseXml(string)));
@@ -119,7 +119,7 @@ const xmlToSlate = string => {
 const slateToXml = editor => {
   const slateToXml = (xw, path, node, selection) => {
     if (Slate.Editor.isEditor(node)) {
-      xw.startElement("editor");
+      xw.startElement('editor');
       node.children.forEach((child, i) => {
         slateToXml(xw, path.concat(i), child, selection);
       });
@@ -168,12 +168,12 @@ const slateToXml = editor => {
           lastOffset = offset;
         }
         if (offset === anchorOffset && offset === focusOffset)
-          xw.startElement("cursor").endElement();
+          xw.startElement('cursor').endElement();
         else if (offset === anchorOffset)
-          xw.startElement("anchor").endElement();
+          xw.startElement('anchor').endElement();
         else if (offset === focusOffset)
-          xw.startElement("focus").endElement();
-        else throw new Error("expected anchor or focus");
+          xw.startElement('focus').endElement();
+        else throw new Error('expected anchor or focus');
       }
       if (lastOffset < node.text.length) {
         xw.text(node.text.substring(lastOffset));
@@ -185,26 +185,25 @@ const slateToXml = editor => {
     } else throw new Error(`expected Slate node type ${node}`);
   };
 
-  const xw = new XMLWriter("  ");
+  const xw = new XMLWriter('  ');
   slateToXml(xw, [], editor, editor.selection);
   return xw.toString();
 };
 
 const e = React.createElement;
 
-const ScrollBox = ({ gridArea, children }) => {
+const ScrollBox = ({ children }) => {
   return e(
-    "div",
+    'div',
     {
       style: {
         backgroundColor: 'white',
-        gridArea,
-        overflow: "scroll",
-        margin: "5px",
-        padding: "5px",
-        borderRadius: "10px",
-        borderStyle: "solid",
-        borderWidth: "1px"
+        overflow: 'scroll',
+        margin: '5px',
+        padding: '5px',
+        borderRadius: '10px',
+        borderStyle: 'solid',
+        borderWidth: '1px',
       }
     },
     children
@@ -212,12 +211,11 @@ const ScrollBox = ({ gridArea, children }) => {
 };
 
 const Label = (props) => {
-  const { gridArea, children, justifySelf = "end" } = props;
+  const { children, justifySelf = 'end' } = props;
   return e(
-    "div",
+    'div',
     {
       style: {
-        gridArea,
         justifySelf
       }
     },
@@ -226,11 +224,11 @@ const Label = (props) => {
 };
 
 const Help = (props) => {
-  const { gridArea, children } = props;
+  const { children } = props;
 
   return e(
     ScrollBox,
-    { gridArea },
+    { },
     e('div', { dangerouslySetInnerHTML: { __html:`
 <h3>Hello!</h3>
 
@@ -283,11 +281,11 @@ const renderElement = ({ element, attributes, children }) => {
         'div',
         { ...attributes,
           style: {
-            margin: "2px",
-            padding: "2px",
-            borderRadius: "5px",
-            borderStyle: "solid",
-            borderWidth: "1px"
+            margin: '2px',
+            padding: '2px',
+            borderRadius: '5px',
+            borderStyle: 'solid',
+            borderWidth: '1px'
           }
         },
         children
@@ -304,12 +302,10 @@ const renderElement = ({ element, attributes, children }) => {
   }
 }
 
-const SlateEditor = ({ gridArea, editor, value, setValue }) => {
+const SlateEditor = ({ editor, value, setValue }) => {
   return e(
     ScrollBox,
-    {
-      gridArea
-    },
+    { },
     e(
       SlateReact.Slate,
       {
@@ -328,27 +324,25 @@ const SlateEditor = ({ gridArea, editor, value, setValue }) => {
   );
 };
 
-const CodeEditor = ({ gridArea, value, setValue, language }) => {
+const CodeEditor = ({ value, setValue, language }) => {
   const highlight = code => Prism.highlight(code, language);
 
   return e(
     ScrollBox,
-    {
-      gridArea
-    },
+    { },
     e(Editor, {
       value,
       onValueChange: setValue,
       highlight,
       style: {
-        fontFamily: "monospace",
+        fontFamily: 'monospace',
         fontSize: 12
       }
     })
   );
 };
 
-const TitleBar = ({ gridArea, state, showHelpValue, setShowHelpValue }) => {
+const TitleBar = ({ state, showHelpValue, setShowHelpValue }) => {
   const copyLinkRef = React.useRef(null);
 
   // cribbed from https://nginx-playground.wizardzines.com/script.js
@@ -383,12 +377,12 @@ const TitleBar = ({ gridArea, state, showHelpValue, setShowHelpValue }) => {
 
   return e(
     'div',
-    { key: "titleBar", style: { gridArea: "titleBar" } },
+    {},
     e('p', { style: { margin: '5px' } },
       e(
         'span',
         { style: { fontSize: '36px' } },
-        "Slate Explorer"
+        'Slate Explorer'
       ),
       e(
         'span',
@@ -404,7 +398,7 @@ const TitleBar = ({ gridArea, state, showHelpValue, setShowHelpValue }) => {
             padding: '5px',
           }
         },
-        "copy link"
+        'copy link'
       ),
       e(
         'span',
@@ -417,11 +411,14 @@ const TitleBar = ({ gridArea, state, showHelpValue, setShowHelpValue }) => {
             userSelect: 'none',
           }
         },
-        showHelpValue ? "hide help" : "show help"
+        showHelpValue ? 'hide help' : 'show help'
       ),
      )
   );
 }
+
+const div = (id, children) =>
+      e('div', { id, style: { display: 'grid', gridArea: id } }, children)
 
 const App = () => {
   // important to memoize the editor
@@ -444,21 +441,21 @@ const App = () => {
   );
 
   const [inputValue, setInputValue] = useState(
-    "input",
-    () => "<editor>\n  <block>this is a line of text</block>\n</editor>"
+    'input',
+    () => '<editor>\n  <block>this is a line of text</block>\n</editor>'
   );
   const [slateValue, setSlateValue] = useState(
-    "slate",
+    'slate',
     () => { try { return xmlToSlate(inputValue).children } catch (e) { return [ { type: 'block', children: [] } ] } },
     json => JSON.parse(json),
     nodes => JSON.stringify(nodes, undefined, 2)
   );
   const [transformValue, setTransformValue] = useState(
-    "transform",
-    () => "editor.insertText('xyzzy')"
+    'transform',
+    () => `editor.insertText('xyzzy')`
   );
   const [showHelpValue, setShowHelpValue] = useState(
-    "showHelp",
+    'showHelp',
     () => false,
     string => string === 'true',
     boolean => boolean ? 'true' : 'false'
@@ -509,30 +506,27 @@ const App = () => {
   }
 
   return e(
-    "div",
+    'div',
     {
       style: {
         backgroundColor: 'aliceblue',
-        padding: "10px",
-        display: "grid",
+        padding: '10px',
+        display: 'grid',
         gridTemplateColumns: `max-content 1fr 1fr ${showHelpValue ? '2fr' : ''}`,
         gridTemplateRows: `max-content 1fr 1fr 1fr`,
         gridTemplateAreas: `
-          "blank          titleBar    titleBar        ${showHelpValue ? 'blank2' : ''}"
+          ".              titleBar    titleBar        ${showHelpValue ? '.' : ''}"
           "inputLabel     slateInput  xmlInput        ${showHelpValue ? 'help' : ''}"
           "transformLabel transform   transformResult ${showHelpValue ? 'help' : ''}"
           "outputLabel    slateOutput xmlOutput       ${showHelpValue ? 'help' : ''}"
         `,
-        height: "100vh",
-        width: "100vw"
+        height: '100vh',
+        width: '100vw'
       }
     },
     [
-      e(
-        TitleBar,
-        {
-          key: 'titleBar',
-          gridArea: 'titleBar',
+      div('titleBar',
+        e(TitleBar, {
           state: {
             input: inputValue,
             slate: slateValue,
@@ -541,59 +535,58 @@ const App = () => {
           },
           showHelpValue,
           setShowHelpValue
-        }
-      ),
-      e(Label, { key: "inputLabel", gridArea: "inputLabel" }, "input"),
-      e(
-        Label,
-        { key: "transformLabel", gridArea: "transformLabel" },
-        "transform"
-      ),
-      e(Label, { key: "outputLabel", gridArea: "outputLabel" }, "output"),
+        })
+       ),
+      div('inputLabel',
+        e(Label, {}, 'input')
+       ),
+      div('transformLabel',
+        e(Label, {}, 'transform')
+       ),
+      div('outputLabel',
+        e(Label, {}, 'output')
+       ),
 
-      showHelpValue && e(Help, { key: "help", gridArea: "help" }),
-      e(SlateEditor, {
-        key: "slateInput",
-        gridArea: "slateInput",
-        editor: inputEditor,
-        value: slateValue,
-        setValue: setSlateAndInputValue
-      }),
-      e(CodeEditor, {
-        key: "xmlInput",
-        gridArea: "xmlInput",
-        value: inputValue,
-        setValue: setInputAndSlateValue,
-        language: Prism.languages.markup
-      }),
-      e(CodeEditor, {
-        key: "transform",
-        gridArea: "transform",
-        value: transformValue,
-        setValue: setTransformValue,
-        language: Prism.languages.js
-      }),
-      e(ScrollBox,
-        {
-          key: "transformResult",
-          gridArea: "transformResult",
-        },
-        e(Inspector, { data: transformResult })
-      ),
-      e(CodeEditor, {
-        key: "xmlOutput",
-        gridArea: "xmlOutput",
-        value: outputXmlValue,
-        setValue: () => {},
-        language: Prism.languages.markup
-      }),
-      e(SlateEditor, {
-        key: "slateOutput",
-        gridArea: "slateOutput",
-        editor: outputEditor,
-        value: outputSlateValue,
-        setValue: () => {}
-      }),
+      div('slateInput',
+        e(SlateEditor, {
+          editor: inputEditor,
+          value: slateValue,
+          setValue: setSlateAndInputValue
+        })
+       ),
+      div('xmlInput',
+        e(CodeEditor, {
+          value: inputValue,
+          setValue: setInputAndSlateValue,
+          language: Prism.languages.markup
+        })
+       ),
+      div('transform',
+        e(CodeEditor, {
+          value: transformValue,
+          setValue: setTransformValue,
+          language: Prism.languages.js
+        })
+       ),
+      div('transformResult',
+        e(ScrollBox, {}, e(Inspector, { data: transformResult }))
+       ),
+      div('xmlOutput',
+        e(CodeEditor, {
+          value: outputXmlValue,
+          setValue: () => {},
+          language: Prism.languages.markup
+        })
+       ),
+      div('slateOutput',
+        e(SlateEditor, {
+          editor: outputEditor,
+          value: outputSlateValue,
+          setValue: () => {}
+        })
+       ),
+
+      showHelpValue && div('help', e(Help))
     ]
   );
 };
