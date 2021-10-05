@@ -418,7 +418,7 @@ const TitleBar = ({ state, showHelpValue, setShowHelpValue }) => {
 }
 
 const div = (id, children) =>
-      e('div', { id, style: { display: 'grid', gridArea: id } }, children)
+      e('div', { id, style: { display: 'grid', overflow: 'hidden', gridArea: id } }, children)
 
 const App = () => {
   // important to memoize the editor
