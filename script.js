@@ -5,9 +5,9 @@ import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IA
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-clike.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-javascript.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-markup.js';
-import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.63.0-8kAIuiMrvJdhdoBHAf4Q/mode=imports/optimized/slate.js';
-import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.62.0-zGj7QlfqPEPT4eVeAZGN/mode=imports/optimized/slate-history.js';
-import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.62.0-InTixSbjzwTyhqYbrm6c/mode=imports/optimized/slate-hyperscript.js';
+import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.66.5-O2GwBInMa4eTHXhKxakn/mode=imports/optimized/slate.js';
+import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.66.0-Ef1xrdc3SYo0pVfi3q52/mode=imports/optimized/slate-history.js';
+import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.66.0-w2pz0tuljkvxbbkEqrdR/mode=imports/optimized/slate-hyperscript.js';
 import React from 'https://cdn.skypack.dev/pin/react@v17.0.1-yH0aYV1FOvoIPeKBbHxg/mode=imports/optimized/react.js';
 import ReactDOM from 'https://cdn.skypack.dev/pin/react-dom@v17.0.1-oZ1BXZ5opQ1DbTh7nu9r/mode=imports/optimized/react-dom.js';
 import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oNzpdFszRH7WWPG5yu6u/mode=imports/optimized/react-inspector.js';
@@ -15,7 +15,7 @@ import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oN
 // can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
 window.React = React;
 window.Slate = Slate;
-import('https://unpkg.com/slate-react@0.65.2/dist/slate-react.js').then(() => {
+import('https://unpkg.com/slate-react@0.66.6/dist/slate-react.js').then(() => {
   ReactDOM.render(e(App), document.getElementById('app'))
 });
 
@@ -232,7 +232,7 @@ const Help = (props) => {
     e('div', { dangerouslySetInnerHTML: { __html:`
 <h3>Hello!</h3>
 
-<p>Slate Explorer is a tool to help you explore the <a href="https://slatejs.org/">Slate</a> rich-text editor framework and its API. It's made by <a href="https://jaked.org/">Jake Donham</a>. More background <a href="https://jaked.org/blog/2021-02-26-Slate-Explorer">here</a>.</p>
+<p>Slate Explorer is a tool to help you explore the <a href="https://slatejs.org/">Slate</a> rich-text editor framework and its API. It's made by <a href="https://jaked.org/">Jake Donham</a>. See <a href="https://jaked.org/blog/2021-02-26-Slate-Explorer">here</a> for more background, or <a href="https://github.com/jaked/slate-explorer">here</a> for code.</p>
 
 <h3>Input</h3>
 
