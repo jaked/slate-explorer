@@ -5,9 +5,9 @@ import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEf
 import 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-clike.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-javascript.js';
 import 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-markup.js';
-import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.66.5-O2GwBInMa4eTHXhKxakn/mode=imports/optimized/slate.js';
-import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.66.0-Ef1xrdc3SYo0pVfi3q52/mode=imports/optimized/slate-history.js';
-import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.66.0-w2pz0tuljkvxbbkEqrdR/mode=imports/optimized/slate-hyperscript.js';
+import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.66.5-6tDx4bvrIAzogIGIMyVh/mode=imports/optimized/slate.js';
+import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.66.0-tw2tT8DfPXTFAta2ddWY/mode=imports/optimized/slate-history.js';
+import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.67.0-wZr4z7OLsIXMgY8XG91d/dist=es2020,mode=imports/optimized/slate-hyperscript.js'
 import React from 'https://cdn.skypack.dev/pin/react@v17.0.1-yH0aYV1FOvoIPeKBbHxg/mode=imports/optimized/react.js';
 import ReactDOM from 'https://cdn.skypack.dev/pin/react-dom@v17.0.1-oZ1BXZ5opQ1DbTh7nu9r/mode=imports/optimized/react-dom.js';
 import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oNzpdFszRH7WWPG5yu6u/mode=imports/optimized/react-inspector.js';
@@ -15,7 +15,7 @@ import { Inspector } from 'https://cdn.skypack.dev/pin/react-inspector@v5.1.1-oN
 // can't yet be converted to use Skypack because https://github.com/skypackjs/skypack-cdn/issues/142
 window.React = React;
 window.Slate = Slate;
-import('https://unpkg.com/slate-react@0.66.6/dist/slate-react.js').then(() => {
+import('https://unpkg.com/slate-react@0.67.0/dist/slate-react.js').then(() => {
   ReactDOM.render(e(App), document.getElementById('app'))
 });
 
