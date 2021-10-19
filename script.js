@@ -469,7 +469,10 @@ const App = () => {
   const setInputAndSlateValue = React.useCallback(input => {
     setInputValue(input);
     try {
-      setSlateValue(xmlToSlate(input).children);
+      const children = xmlToSlate(input).children;
+      setSlateValue(children);
+      inputEditor.children = children;
+      inputEditor.onChange();
     } catch (e) {
       // TODO(jaked) report this error somehow?
       // lots of transient errors while editing
