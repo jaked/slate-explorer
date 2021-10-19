@@ -1,10 +1,10 @@
 import parseXml from 'https://cdn.skypack.dev/pin/@rgrove/parse-xml@v3.0.0-jMFe7mSMYStpUfnUTz7K/mode=imports/optimized/@rgrove/parse-xml.js';
 import XMLWriter from 'https://cdn.skypack.dev/pin/xml-writer@v1.7.0-r8i5k18ngLdXbG8rwkMZ/mode=imports/optimized/xml-writer.js';
 import Editor from 'https://cdn.skypack.dev/pin/react-simple-code-editor@v0.11.0-vp8sfAAurbJN9zEtyguq/mode=imports/optimized/react-simple-code-editor.js';
-import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-core.js';
-import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-clike.js';
-import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-javascript.js';
-import 'https://cdn.skypack.dev/pin/prismjs@v1.23.0-ozzTU6wrQIkYMK5IAk61/mode=imports/unoptimized/components/prism-markup.js';
+import Prism from 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-core.js';
+import 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-clike.js';
+import 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-javascript.js';
+import 'https://cdn.skypack.dev/pin/prismjs@v1.25.0-tTYTDFL4W8LppUEEfV3w/mode=imports/unoptimized/components/prism-markup.js';
 import * as Slate from 'https://cdn.skypack.dev/pin/slate@v0.66.5-O2GwBInMa4eTHXhKxakn/mode=imports/optimized/slate.js';
 import * as SlateHistory from 'https://cdn.skypack.dev/pin/slate-history@v0.66.0-Ef1xrdc3SYo0pVfi3q52/mode=imports/optimized/slate-history.js';
 import * as SlateHyperscript from 'https://cdn.skypack.dev/pin/slate-hyperscript@v0.66.0-w2pz0tuljkvxbbkEqrdR/mode=imports/optimized/slate-hyperscript.js';
