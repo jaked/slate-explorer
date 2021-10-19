@@ -472,7 +472,6 @@ const App = () => {
       const children = xmlToSlate(input).children;
       setSlateValue(children);
       inputEditor.children = children;
-      inputEditor.onChange();
     } catch (e) {
       // TODO(jaked) report this error somehow?
       // lots of transient errors while editing
